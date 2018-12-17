@@ -8,9 +8,24 @@ class Console
         return "<script type='text/javascript'>" . $script . "</script>";
     }
 
-    public function clear()
+    private function format_by_type($input)
     {
-        echo $this->wrap_script("console.clear()");
+        $type = gettype($input);
+        switch ($type) {
+            case "array":
+                $contents = "Array(";
+                foreach ($input as $key => $element) {
+                    $contents .= $this->format_by_type($element);
+                    if ($key !== count($input) - 1) {
+                        $contents .= ", ";
+                    }
+                }
+                $contents .= ")";
+                return $contents;
+                break;
+            default:
+                return $input;
+        }
     }
 
     public function log($input)
@@ -27,11 +42,15 @@ class Console
         $line = $caller["line"];
         $meta = $file . ":" . $line;
 
-        // content to log
-        $contents = $input;
+        // contents to log
+        $contents = $this->format_by_type($input);
 
-        $log = $this->wrap_script($console_start . $meta . "%c" . $contents . $console_end);
-        echo $log;
+        echo $this->wrap_script($console_start . $meta . "%c" . $contents . $console_end);
+    }
+
+    public function clear()
+    {
+        echo $this->wrap_script("console.clear()");
     }
 
 }
