@@ -6,6 +6,7 @@ Manipulate the front end console with PHP.
 include "console.php";
 $console->log("Hello, World!");
 ```
+<img width="50%" alt="Screenshot" src="Hello%2C%20World!.jpg" />
 
 ## Documentation
 
