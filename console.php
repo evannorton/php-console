@@ -69,7 +69,8 @@ class Console
         $meta = $file . ":" . $line;
 
         // contents to log
-        $contents = $this->format_by_type($input);
+        $contents = str_replace("'", "\'", $input);
+        $contents = $this->format_by_type($contents);
 
         $this->depth = 0;
 
