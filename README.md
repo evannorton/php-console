@@ -4,7 +4,7 @@ Manipulate the front end console with PHP.
 ## Hello World example
 ```
 include "console.php";
-$Console::log("Hello, World!");
+Console::log("Hello, World!");
 ```
 ![Screenshot](Hello%2C%20World!.jpg)
 
