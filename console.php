@@ -59,7 +59,7 @@ class Console
     function print($input, $bt, $protocol) {
         // styling
         $console_start = "console.$protocol('%c";
-        $console_end = "', 'color:white;background-color:black;padding:0 .25em;', 'padding-left: .5em');";
+        $console_end = "', 'color:white;background-color:black;padding:0 .25em;margin-right:.5em;', '');";
 
         // file name and line number
         $caller = array_shift($bt);
