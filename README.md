@@ -4,23 +4,23 @@ Manipulate the front end console with PHP.
 ## Hello World example
 ```
 include "console.php";
-$console->log("Hello, World!");
+$Console::log("Hello, World!");
 ```
 ![Screenshot](Hello%2C%20World!.jpg)
 
 ## Documentation
 
-### `void console->clear()`
+### `void Console::clear()`
 Clears the console.
 
-### `void console->error(mixed $input)`
+### `void Console::error(mixed $input)`
 Logs the argument to the console as an error.
 
-### `void console->info(mixed $input)`
+### `void Console::info(mixed $input)`
 Logs the argument to the console as info.
 
-### `void console->log(mixed $input)`
+### `void Console::log(mixed $input)`
 Logs the argument to the console.
 
-### `void console->warn(mixed $input)`
+### `void Console::warn(mixed $input)`
 Logs the argument to the console as a warning.

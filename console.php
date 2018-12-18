@@ -3,52 +3,52 @@
 class Console
 {
 
-    private $depth = 0;
+    private static $depth = 0;
 
-    private function wrap_script($script)
+    private static function wrap_script($script)
     {
         return "<script type='text/javascript'>" . $script . "</script>";
     }
 
-    private function get_indent()
+    private static function get_indent()
     {
-        return str_repeat("   ", $this->depth);
+        return str_repeat("   ", Console::$depth);
     }
 
-    private function format_by_type($input)
+    private static function format_by_type($input)
     {
         $type = gettype($input);
         switch ($type) {
             case "array":
-                $this->depth++;
+                Console::$depth++;
                 $contents = "Array(";
-                if ($this->depth === 1) {
+                if (Console::$depth === 1) {
                     $contents = "\\n" . $contents;
                 }
                 foreach ($input as $key => $element) {
-                    $contents .= "\\n" . $this->get_indent() . "[" . $key . "] => ";
-                    $contents .= $this->format_by_type($element);
+                    $contents .= "\\n" . Console::get_indent() . "[" . $key . "] => ";
+                    $contents .= Console::format_by_type($element);
                     if ($key !== count($input) - 1) {
                         $contents .= ", ";
                     }
                 }
-                $this->depth--;
-                $contents .= "\\n" . $this->get_indent() . ")";
+                Console::$depth--;
+                $contents .= "\\n" . Console::get_indent() . ")";
                 return $contents;
                 break;
             case "object":
-                $this->depth++;
+                Console::$depth++;
                 $contents = get_class($input) . " Object {";
-                if ($this->depth === 1) {
+                if (Console::$depth === 1) {
                     $contents = "\\n" . $contents;
                 }
                 $input_keys = get_object_vars($input);
                 foreach ($input_keys as $key => $value) {
-                    $contents .= "\\n" . $this->get_indent() . "[" . $key . "] => ";
-                    $contents .= $this->format_by_type($value);
+                    $contents .= "\\n" . Console::get_indent() . "[" . $key . "] => ";
+                    $contents .= Console::format_by_type($value);
                 }
-                $this->depth--;
-                $contents .= "\\n" . $this->get_indent() . "}";
+                Console::$depth--;
+                $contents .= "\\n" . Console::get_indent() . "}";
                 return $contents;
                 break;
             default:
@@ -56,7 +56,8 @@ class Console
         }
     }
 
-    function print($input, $bt, $protocol) {
+    private static function printLog($input, $bt, $protocol)
+    {
         // styling
         $console_start = "console.$protocol('%c";
         $console_end = "', 'color:white;background-color:black;padding:0 .25em;margin-right:.5em;', '');";
@@ -70,35 +71,32 @@ class Console
 
         // contents to log
         $contents = str_replace("'", "\'", $input);
-        $contents = $this->format_by_type($contents);
+        $contents = Console::format_by_type($contents);
 
-        $this->depth = 0;
+        Console::$depth = 0;
 
-        echo $this->wrap_script($console_start . $meta . "%c" . $contents . $console_end);
-    }
-
-    public function log($input)
-    {
-        $this->print($input, debug_backtrace(), "log");
-    }
-    public function info($input)
-    {
-        $this->print($input, debug_backtrace(), "info");
-    }
-    public function warn($input)
-    {
-        $this->print($input, debug_backtrace(), "warn");
-    }
-    public function error($input)
-    {
-        $this->print($input, debug_backtrace(), "error");
+        echo Console::wrap_script($console_start . $meta . "%c" . $contents . $console_end);
     }
 
-    public function clear()
+    public static function log($input)
     {
-        echo $this->wrap_script("console.clear()");
+        Console::printLog($input, debug_backtrace(), "log");
+    }
+    public static function info($input)
+    {
+        Console::printLog($input, debug_backtrace(), "info");
+    }
+    public static function warn($input)
+    {
+        Console::printLog($input, debug_backtrace(), "warn");
+    }
+    public static function error($input)
+    {
+        Console::printLog($input, debug_backtrace(), "error");
+    }
+    public static function clear()
+    {
+        echo Console::wrap_script("console.clear()");
     }
 
 }
-
-$console = new Console;
