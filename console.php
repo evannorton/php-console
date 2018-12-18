@@ -3,6 +3,10 @@
 class Console
 {
 
+    private $array_depth = 0;
+    private $array_indent = "";
+    private $array_indent_paren = "";
+
     private function wrap_script($script)
     {
         return "<script type='text/javascript'>" . $script . "</script>";
@@ -13,14 +17,30 @@ class Console
         $type = gettype($input);
         switch ($type) {
             case "array":
+                $this->array_depth++;
+                $this->array_indent .= "  ";
                 $contents = "Array(";
+                if ($this->array_depth === 1) {
+                    $contents = "\\n" . $contents;
+                } else {
+                    $this->array_indent .= "       ";
+                }
                 foreach ($input as $key => $element) {
+                    $contents .= "\\n" . $this->array_indent . "[" . $key . "] => ";
                     $contents .= $this->format_by_type($element);
                     if ($key !== count($input) - 1) {
                         $contents .= ", ";
                     }
                 }
-                $contents .= ")";
+
+                $this->array_depth--;
+                $paren_indent_length = $this->array_depth * 9;
+
+                $paren_indent = "";
+                for ($i = 0; $i < $paren_indent_length; $i++) {
+                    $paren_indent .= " ";
+                }
+                $contents .= "\\n" . $paren_indent . ")";
                 return $contents;
                 break;
             default:
@@ -44,6 +64,9 @@ class Console
 
         // contents to log
         $contents = $this->format_by_type($input);
+
+        $this->array_depth = "";
+        $this->array_indent = "";
 
         echo $this->wrap_script($console_start . $meta . "%c" . $contents . $console_end);
     }
