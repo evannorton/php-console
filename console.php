@@ -20,35 +20,33 @@ class Console
         $type = gettype($input);
         switch ($type) {
             case "array":
+            case "object":
                 Console::$depth++;
-                $contents = "Array(";
+                $contents = "";
+                if ($type === "array") {
+                    $contents .= "Array(";
+                } else {
+                    $contents .= get_class($input) . " Object {";
+                }
                 if (Console::$depth === 1) {
                     $contents = "\\n" . $contents;
                 }
+                $i = 0;
                 foreach ($input as $key => $element) {
                     $contents .= "\\n" . Console::get_indent() . "[" . $key . "] => ";
                     $contents .= Console::format_by_type($element);
-                    if ($key !== count($input) - 1) {
+                    if ($i !== count((array) $input) - 1) {
                         $contents .= ", ";
                     }
+                    $i++;
                 }
                 Console::$depth--;
-                $contents .= "\\n" . Console::get_indent() . ")";
-                return $contents;
-                break;
-            case "object":
-                Console::$depth++;
-                $contents = get_class($input) . " Object {";
-                if (Console::$depth === 1) {
-                    $contents = "\\n" . $contents;
+                $contents .= "\\n" . Console::get_indent();
+                if ($type === "array") {
+                    $contents .= ")";
+                } else {
+                    $contents .= "}";
                 }
-                $input_keys = get_object_vars($input);
-                foreach ($input_keys as $key => $value) {
-                    $contents .= "\\n" . Console::get_indent() . "[" . $key . "] => ";
-                    $contents .= Console::format_by_type($value);
-                }
-                Console::$depth--;
-                $contents .= "\\n" . Console::get_indent() . "}";
                 return $contents;
                 break;
             default:
