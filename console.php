@@ -63,7 +63,7 @@ class Console
         // file name and line number
         $caller = array_shift($bt);
         $file = $caller["file"];
-        $file = substr($file, strrpos($file, "\\") + 1);
+        $file = substr($file, strrpos($file, DIRECTORY_SEPARATOR) + 1);
         $line = $caller["line"];
         $meta = $file . ":" . $line;
 
