@@ -47,7 +47,13 @@ class Console
                 break;
             default:
                 // escape single quotes
-                return str_replace("'", "\'", $input);
+                $input = str_replace("'", "\'", $input);
+                // remove line breaks and indents
+                $input = preg_replace("/\r/", "\\r", $input);
+                self::$depth++;
+                $input = preg_replace("/\n/", "\\n" . self::get_indent(), $input);
+                self::$depth--;
+                return $input;
         }
     }
     private static function printLog($input, $bt, $protocol)
