@@ -3,7 +3,7 @@ Manipulate the front end console with PHP.
 
 ## Hello World example
 ```
-include_once "console.php";
+require_once "console.php";
 Console::log("Hello, World!");
 ```
 ![Screenshot](Hello%2C%20World!.jpg)
