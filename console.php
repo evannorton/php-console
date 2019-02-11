@@ -5,7 +5,9 @@ class Console
     private static $depth = 0;
     private static function wrap_script($script)
     {
-        return "<script type='text/javascript'>" . $script . "</script>";
+        $script_element = "document.getElementById(\"php-console\")";
+        $delete_script = $script_element . ".parentNode.removeChild(" . $script_element . ");";
+        return "<script id=\"php-console\" type=\"text/javascript\">" . $script . $delete_script . "</script>";
     }
     private static function get_indent()
     {
@@ -56,7 +58,7 @@ class Console
                 return $input;
         }
     }
-    private static function printLog($input, $bt, $protocol)
+    private static function print_log($input, $bt, $protocol)
     {
         // styling
         $console_start = "console.$protocol('%c";
@@ -69,24 +71,26 @@ class Console
         $meta = $file . ":" . $line;
         // contents to log
         $contents = self::format_by_type($input);
+        // reset indent depth
         self::$depth = 0;
+        // echo script
         echo self::wrap_script($console_start . $meta . "%c" . $contents . $console_end);
     }
     public static function log($input)
     {
-        self::printLog($input, debug_backtrace(), "log");
+        self::print_log($input, debug_backtrace(), "log");
     }
     public static function info($input)
     {
-        self::printLog($input, debug_backtrace(), "info");
+        self::print_log($input, debug_backtrace(), "info");
     }
     public static function warn($input)
     {
-        self::printLog($input, debug_backtrace(), "warn");
+        self::print_log($input, debug_backtrace(), "warn");
     }
     public static function error($input)
     {
-        self::printLog($input, debug_backtrace(), "error");
+        self::print_log($input, debug_backtrace(), "error");
     }
     public static function clear()
     {
