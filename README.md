@@ -13,14 +13,23 @@ Console::log("Hello, World!");
 ### `void Console::clear()`
 Clears the console.
 
-### `void Console::error(mixed $input)`
+### `void Console::error(mixed $msg)`
 Logs the argument to the console as an error.
 
-### `void Console::info(mixed $input)`
+### `void Console::group(string $label)`
+Creates a new inline group in the console.
+
+### `void Console::groupCollapsed(string $label)`
+Creates a new collapsed inline group in the console.
+
+### `void Console::groupEnd(string $label)`
+Exits the current inline group.
+
+### `void Console::info(mixed $msg)`
 Logs the argument to the console as info.
 
-### `void Console::log(mixed $input)`
+### `void Console::log(mixed $msg)`
 Logs the argument to the console.
 
-### `void Console::warn(mixed $input)`
+### `void Console::warn(mixed $msg)`
 Logs the argument to the console as a warning.
