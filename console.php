@@ -48,6 +48,8 @@ class Console
                 return $contents;
                 break;
             default:
+                // unescape backslashes
+                $msg = str_replace("\\", "\\\\", $msg);
                 // escape single quotes
                 $msg = str_replace("'", "\'", $msg);
                 // remove line breaks and indents
@@ -96,13 +98,16 @@ class Console
     {
         echo self::wrap_script("console.clear()");
     }
-    public static function group($label) {
-        echo self::wrap_script("console.group('" . $label ."');");
+    public static function group($label)
+    {
+        echo self::wrap_script("console.group('" . $label . "');");
     }
-    public static function groupCollapsed($label) {
-        echo self::wrap_script("console.groupCollapsed('" . $label ."');");
+    public static function groupCollapsed($label)
+    {
+        echo self::wrap_script("console.groupCollapsed('" . $label . "');");
     }
-    public static function groupEnd() {
+    public static function groupEnd()
+    {
         echo self::wrap_script("console.groupEnd();");
     }
 }
