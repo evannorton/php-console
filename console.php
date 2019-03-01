@@ -13,9 +13,9 @@ class Console
     {
         return str_repeat("   ", self::$depth);
     }
-    private static function format_by_type($input)
+    private static function format_by_type($msg)
     {
-        $type = gettype($input);
+        $type = gettype($msg);
         switch ($type) {
             case "array":
             case "object":
@@ -24,16 +24,16 @@ class Console
                 if ($type === "array") {
                     $contents .= "Array(";
                 } else {
-                    $contents .= get_class($input) . " Object {";
+                    $contents .= get_class($msg) . " Object {";
                 }
                 if (self::$depth === 1) {
                     $contents = "\\n" . $contents;
                 }
                 $i = 0;
-                foreach ($input as $key => $element) {
+                foreach ($msg as $key => $element) {
                     $contents .= "\\n" . self::get_indent() . "[" . $key . "] => ";
                     $contents .= self::format_by_type($element);
-                    if ($i !== count((array) $input) - 1) {
+                    if ($i !== count((array) $msg) - 1) {
                         $contents .= ", ";
                     }
                     $i++;
@@ -49,16 +49,16 @@ class Console
                 break;
             default:
                 // escape single quotes
-                $input = str_replace("'", "\'", $input);
+                $msg = str_replace("'", "\'", $msg);
                 // remove line breaks and indents
-                $input = preg_replace("/\r/", "\\r", $input);
+                $msg = preg_replace("/\r/", "\\r", $msg);
                 self::$depth++;
-                $input = preg_replace("/\n/", "\\n" . self::get_indent(), $input);
+                $msg = preg_replace("/\n/", "\\n" . self::get_indent(), $msg);
                 self::$depth--;
-                return $input;
+                return $msg;
         }
     }
-    private static function print_log($input, $bt, $protocol)
+    private static function print_log($msg, $bt, $protocol)
     {
         // styling
         $console_start = "console.$protocol('%c";
@@ -70,30 +70,39 @@ class Console
         $line = $caller["line"];
         $meta = $file . ":" . $line;
         // contents to log
-        $contents = self::format_by_type($input);
+        $contents = self::format_by_type($msg);
         // reset indent depth
         self::$depth = 0;
         // echo script
         echo self::wrap_script($console_start . $meta . "%c" . $contents . $console_end);
     }
-    public static function log($input)
+    public static function log($msg)
     {
-        self::print_log($input, debug_backtrace(), "log");
+        self::print_log($msg, debug_backtrace(), "log");
     }
-    public static function info($input)
+    public static function info($msg)
     {
-        self::print_log($input, debug_backtrace(), "info");
+        self::print_log($msg, debug_backtrace(), "info");
     }
-    public static function warn($input)
+    public static function warn($msg)
     {
-        self::print_log($input, debug_backtrace(), "warn");
+        self::print_log($msg, debug_backtrace(), "warn");
     }
-    public static function error($input)
+    public static function error($msg)
     {
-        self::print_log($input, debug_backtrace(), "error");
+        self::print_log($msg, debug_backtrace(), "error");
     }
     public static function clear()
     {
         echo self::wrap_script("console.clear()");
+    }
+    public static function group($label) {
+        echo self::wrap_script("console.group('" . $label ."');");
+    }
+    public static function groupCollapsed($label) {
+        echo self::wrap_script("console.groupCollapsed('" . $label ."');");
+    }
+    public static function groupEnd() {
+        echo self::wrap_script("console.groupEnd();");
     }
 }
