@@ -22,7 +22,7 @@ Creates a new inline group in the console.
 ### `void Console::groupCollapsed(string $label)`
 Creates a new collapsed inline group in the console.
 
-### `void Console::groupEnd(string $label)`
+### `void Console::groupEnd()`
 Exits the current inline group.
 
 ### `void Console::info(mixed $msg)`
