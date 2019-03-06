@@ -110,4 +110,8 @@ class Console
     {
         echo self::wrap_script("console.groupEnd();");
     }
+    public static function count($label)
+    {
+        echo self::wrap_script("console.count('$label');");
+    }
 }
