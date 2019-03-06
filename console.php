@@ -12,7 +12,15 @@ class Console
     }
     private static function get_method()
     {
-        return debug_backtrace()[2]["function"];
+        $function = debug_backtrace()[2]["function"];
+        $underscore_position = strpos($function, "_");
+        if ($underscore_position) {
+            $word_separation = substr($function, $underscore_position, 2);
+            $capital_letter = ucfirst(substr($word_separation, 1, 1));
+            return str_replace($word_separation, $capital_letter, $function);
+        } else {
+            return $function;
+        }
     }
     private static function get_call_point()
     {
@@ -98,11 +106,11 @@ class Console
     {
         self::print_log($label);
     }
-    public static function groupCollapsed($label = "console.groupCollapsed")
+    public static function group_collapsed($label = "console.groupCollapsed")
     {
         self::print_log($label);
     }
-    public static function groupEnd()
+    public static function group_end()
     {
         echo self::wrap_script("console.groupEnd();");
     }

@@ -22,10 +22,10 @@ Logs the argument to the console as an error.
 ### `void Console::group(string $label)`
 Creates a new inline group in the console.
 
-### `void Console::groupCollapsed(string $label)`
+### `void Console::group_collapsed(string $label)`
 Creates a new collapsed inline group in the console.
 
-### `void Console::groupEnd()`
+### `void Console::group_end()`
 Exits the current inline group.
 
 ### `void Console::info(mixed $msg)`
