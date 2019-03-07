@@ -33,9 +33,9 @@ class Console
     {
         return str_repeat("   ", self::$depth);
     }
-    private static function format_by_type($contents)
+    private static function format_by_type($input)
     {
-        $type = gettype($contents);
+        $type = gettype($input);
         switch ($type) {
             case "array":
             case "object":
@@ -44,16 +44,16 @@ class Console
                 if ($type === "array") {
                     $contents .= "Array(";
                 } else {
-                    $contents .= get_class($contents) . " Object {";
+                    $contents .= get_class($input) . " Object {";
                 }
                 if (self::$depth === 1) {
                     $contents = "\\n" . $contents;
                 }
                 $i = 0;
-                foreach ($contents as $key => $element) {
+                foreach ($input as $key => $element) {
                     $contents .= "\\n" . self::get_indent() . "[" . $key . "] => ";
                     $contents .= self::format_by_type($element);
-                    if ($i !== count((array) $contents) - 1) {
+                    if ($i !== count((array) $input) - 1) {
                         $contents .= ", ";
                     }
                     $i++;
@@ -71,55 +71,60 @@ class Console
                 return "' + null + '";
                 break;
             default:
-                $contents = str_replace("\\", "\\\\", $contents);
-                $contents = str_replace("'", "\'", $contents);
-                $contents = preg_replace("/\r/", "\\r", $contents);
+                $input = str_replace("\\", "\\\\", $input);
+                $input = str_replace("'", "\'", $input);
+                $input = preg_replace("/\r/", "\\r", $input);
                 self::$depth++;
-                $contents = preg_replace("/\n/", "\\n" . self::get_indent(), $contents);
+                $input = preg_replace("/\n/", "\\n" . self::get_indent(), $input);
                 self::$depth--;
-
-                return $contents;
+                return $input;
         }
     }
-    private static function print_log($contents)
+    private static function print_log($contents = "") {
+        echo self::wrap_script("console." . self::get_method() . "('" . self::format_by_type($contents) . "');");
+    }
+    private static function print_styled_log($contents = "")
     {
         echo self::wrap_script("console." . self::get_method() . "('%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling);
-        self::$depth = 0;
     }
     public static function log($msg)
     {
-        self::print_log($msg);
+        self::print_styled_log($msg);
     }
     public static function info($msg)
     {
-        self::print_log($msg);
+        self::print_styled_log($msg);
     }
     public static function warn($msg)
     {
-        self::print_log($msg);
+        self::print_styled_log($msg);
     }
     public static function error($msg)
     {
-        self::print_log($msg);
+        self::print_styled_log($msg);
     }
     public static function group($label = "console.group")
     {
-        self::print_log($label);
+        self::print_styled_log($label);
     }
     public static function group_collapsed($label = "console.groupCollapsed")
     {
-        self::print_log($label);
+        self::print_styled_log($label);
     }
     public static function group_end()
     {
-        echo self::wrap_script("console.groupEnd();");
+        self::print_log();
     }
     public static function clear()
     {
-        echo self::wrap_script("console.clear()");
+        self::print_log();
     }
     public static function count($label = "default")
     {
-        echo self::wrap_script("console.count('$label');");
+        self::print_log($label);
+    }
+    public static function count_reset($label = "default")
+    {
+        self::print_log($label);
     }
 }
