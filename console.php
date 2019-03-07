@@ -100,7 +100,7 @@ class Console
     {
         self::print_log($label);
     }
-    public static function error($msg)
+    public static function error($msg = "")
     {
         self::print_styled_log($msg);
     }
@@ -116,15 +116,15 @@ class Console
     {
         self::print_log();
     }
-    public static function info($msg)
+    public static function info($msg = "")
     {
         self::print_styled_log($msg);
     }
-    public static function log($msg)
+    public static function log($msg = "")
     {
         self::print_styled_log($msg);
     }
-    public static function warn($msg)
+    public static function warn($msg = "")
     {
         self::print_styled_log($msg);
     }
