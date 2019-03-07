@@ -124,6 +124,18 @@ class Console
     {
         self::print_styled_log($msg);
     }
+    public static function time($label = "default")
+    {
+        self::print_log($label);
+    }
+    public static function time_end($label = "default")
+    {
+        self::print_log($label);
+    }
+    public static function time_log($label = "default")
+    {
+        self::print_log($label);
+    }
     public static function warn($msg = "")
     {
         self::print_styled_log($msg);
