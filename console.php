@@ -80,24 +80,25 @@ class Console
                 return $input;
         }
     }
-    private static function print_log($contents = "") {
+    private static function print_log($contents = "")
+    {
         echo self::wrap_script("console." . self::get_method() . "('" . self::format_by_type($contents) . "');");
     }
     private static function print_styled_log($contents = "")
     {
         echo self::wrap_script("console." . self::get_method() . "('%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling);
     }
-    public static function log($msg)
+    public static function clear()
     {
-        self::print_styled_log($msg);
+        self::print_log();
     }
-    public static function info($msg)
+    public static function count($label = "default")
     {
-        self::print_styled_log($msg);
+        self::print_log($label);
     }
-    public static function warn($msg)
+    public static function count_reset($label = "default")
     {
-        self::print_styled_log($msg);
+        self::print_log($label);
     }
     public static function error($msg)
     {
@@ -115,16 +116,16 @@ class Console
     {
         self::print_log();
     }
-    public static function clear()
+    public static function info($msg)
     {
-        self::print_log();
+        self::print_styled_log($msg);
     }
-    public static function count($label = "default")
+    public static function log($msg)
     {
-        self::print_log($label);
+        self::print_styled_log($msg);
     }
-    public static function count_reset($label = "default")
+    public static function warn($msg)
     {
-        self::print_log($label);
+        self::print_styled_log($msg);
     }
 }
