@@ -16,6 +16,9 @@ Clears the console.
 ### `void Console::count()`
 Logs the number of times that `count()` has been called with a particular label.
 
+### `void Console::count_reset()`
+Resets the `count()` counter for a particular label.
+
 ### `void Console::error(mixed $msg)`
 Logs the argument to the console as an error.
 
