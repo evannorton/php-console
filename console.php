@@ -3,7 +3,7 @@
 class Console
 {
     private static $depth = 0;
-    private static $call_point_styling = "', 'color:white;background-color:black;padding:0 .25em;margin-right:.5em;', '');";
+    private static $call_point_styling = "\", \"color:white;background-color:black;padding:0 .25em;margin-right:.5em;\", \"\");";
     private static function wrap_script($script)
     {
         $script_element = "document.getElementById(\"php-console\")";
@@ -68,11 +68,11 @@ class Console
                 return $contents;
                 break;
             case "NULL":
-                return "' + null + '";
+                return "\" + null + \"";
                 break;
             default:
                 $input = str_replace("\\", "\\\\", $input);
-                $input = str_replace("'", "\'", $input);
+                $input = str_replace("\"", "\\\"", $input);
                 $input = preg_replace("/\r/", "\\r", $input);
                 self::$depth++;
                 $input = preg_replace("/\n/", "\\n" . self::get_indent(), $input);
@@ -82,11 +82,11 @@ class Console
     }
     private static function print_log($contents = "")
     {
-        echo self::wrap_script("console." . self::get_method() . "('" . self::format_by_type($contents) . "');");
+        echo self::wrap_script("console." . self::get_method() . "(\"" . self::format_by_type($contents) . "\");");
     }
     private static function print_styled_log($contents = "")
     {
-        echo self::wrap_script("console." . self::get_method() . "('%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling);
+        echo self::wrap_script("console." . self::get_method() . "(\"%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling);
     }
     public static function clear()
     {
