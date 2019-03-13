@@ -10,6 +10,9 @@ Console::log("Hello, World!");
 
 ## Documentation
 
+### `void Console::assert(mixed $assertion, mixed $msg)`
+Does nothing if the assertion is truthy. Logs an error message if the assertion is falsy.
+
 ### `void Console::clear()`
 Clears the console.
 
