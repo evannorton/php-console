@@ -80,8 +80,11 @@ class Console
                 }
                 return $contents;
                 break;
+            case "boolean":
+                return $input ? "true" : "false";
+                break;
             case "NULL":
-                return "\" + null + \"";
+                return "null";
                 break;
             default:
                 $input = str_replace("\\", "\\\\", $input);
@@ -99,7 +102,6 @@ class Console
     }
     private static function print_styled_log($contents = "")
     {
-        echo "console." . self::get_method() . "(\"%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling;
         echo self::wrap_script("console." . self::get_method() . "(\"%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling);
     }
     public static function assert($assertion = false, $msg = "console.assert")
