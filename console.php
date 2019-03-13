@@ -10,9 +10,21 @@ class Console
         $delete_script = $script_element . ".parentNode.removeChild(" . $script_element . ");";
         return "<script id=\"php-console\" type=\"text/javascript\">" . $script . $delete_script . "</script>";
     }
+    private static function get_backtrace()
+    {
+        $bt = debug_backtrace();
+        $bt_count = 0;
+        foreach ($bt as $bt_step) {
+            if ($bt_step["file"] !== __FILE__) {
+                $bt_count++;
+            }
+        }
+        return $bt[sizeof($bt) - $bt_count];
+    }
     private static function get_method()
     {
-        $function = debug_backtrace()[2]["function"];
+        $function = self::get_backtrace()["function"];
+        $function = $function === "assert" ? "error" : $function;
         $underscore_position = strpos($function, "_");
         if ($underscore_position) {
             $word_separation = substr($function, $underscore_position, 2);
@@ -24,9 +36,10 @@ class Console
     }
     private static function get_call_point()
     {
-        $bt = debug_backtrace()[2];
-        $file = substr($bt["file"], strrpos($bt["file"], DIRECTORY_SEPARATOR) + 1);
-        $line = $bt["line"];
+        $bt_step = self::get_backtrace();
+        $file_dir = $bt_step["file"];
+        $file = substr($file_dir, strrpos($file_dir, DIRECTORY_SEPARATOR) + 1);
+        $line = $bt_step["line"];
         return $file . ":" . $line;
     }
     private static function get_indent()
@@ -86,7 +99,14 @@ class Console
     }
     private static function print_styled_log($contents = "")
     {
+        echo "console." . self::get_method() . "(\"%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling;
         echo self::wrap_script("console." . self::get_method() . "(\"%c" . self::get_call_point() . "%c" . self::format_by_type($contents) . self::$call_point_styling);
+    }
+    public static function assert($assertion = false, $msg = "console.assert")
+    {
+        if (!$assertion) {
+            self::error("Assertion failed: " . $msg);
+        }
     }
     public static function clear()
     {
