@@ -53,12 +53,7 @@ class Console
             case "array":
             case "object":
                 self::$depth++;
-                $contents = "";
-                if ($type === "array") {
-                    $contents .= "Array (";
-                } else {
-                    $contents .= get_class($input) . " Object {";
-                }
+                $contents = $type === "array" ? "Array (" : get_class($input) . " Object {";
                 if (self::$depth === 1) {
                     $contents = "\\n" . $contents;
                 }
