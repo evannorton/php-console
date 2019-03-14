@@ -55,7 +55,7 @@ class Console
                 self::$depth++;
                 $contents = "";
                 if ($type === "array") {
-                    $contents .= "Array(";
+                    $contents .= "Array (";
                 } else {
                     $contents .= get_class($input) . " Object {";
                 }
