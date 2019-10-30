@@ -81,6 +81,8 @@ class Console
             case "NULL":
                 return "null";
                 break;
+            case "string":
+                return '"' . $input . '"';
             default:
                 $input = str_replace("\\", "\\\\", $input);
                 $input = str_replace("\"", "\\\"", $input);
